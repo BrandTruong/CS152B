@@ -120,7 +120,7 @@ module testbench(
      
      reg [15:0] a;
          reg [15:0] b;
-         reg alu_control
+         reg [3:0] alu_control;
          reg less;
          wire [15:0] result;
          wire set;

@@ -36,13 +36,22 @@ module sixteen_bit_alu(
     reg less = 0;
     
     wire [15:0] cin;
-    assign cin[0] = 0;
+    assign cin[0] = b_sel;
+    
+    alu_control alu_control_unit(
+        .sel(alu_ctrl),
+        .a_sel(a_sel),
+        .b_sel(b_sel),
+        .op(op),
+        .set(set)
+        );
+        
     one_bit_alu bit_0 (
         .a(a[0]),
         .b(b[0]),
         .a_sel(a_sel),
         .b_sel(b_sel),
-        .cin(0), // change to cout of previous
+        .cin(cin[0]), // change to cout of previous
         .op(op),
         .less(less),
         .result(result),
