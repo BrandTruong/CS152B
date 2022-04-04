@@ -34,3 +34,18 @@ module two_one_mux(
         else
             x = a;
 endmodule
+
+module five_bit_two_one_mux(
+    input sel,
+    input[4:0] a,
+    input[4:0] b,
+    output reg[4:0] x
+    );
+    
+    
+    always @*
+        if(sel)
+            x = b;
+        else
+            x = a;
+endmodule

@@ -81,7 +81,7 @@ module testbench(
         b = 0;
     end
     */
-    
+    /*
     reg a;
     reg b;
     reg a_sel;
@@ -94,7 +94,6 @@ module testbench(
     wire overflow;
     wire cout;
     
-    
     one_bit_alu one_bit_alu_UUT(
          .a(a),
         .b(b),
@@ -104,11 +103,9 @@ module testbench(
         .op(op),
         .less(less),
         .result(result),
-        .set(set),
-        .overflow(overflow),
         .cout(cout)
         );
-        
+      
      initial
      begin
         a = 1;
@@ -119,5 +116,39 @@ module testbench(
         op = 2;
         less = 0;
      end
+     */
+     
+     reg [15:0] a;
+         reg [15:0] b;
+         reg alu_control
+         reg less;
+         wire [15:0] result;
+         wire set;
+         wire overflow;
+         wire cout;
+         
+         one_bit_alu one_bit_alu_UUT(
+              .a(a),
+             .b(b),
+             .a_sel(a_sel),
+             .b_sel(b_sel),
+             .cin(cin),
+             .op(op),
+             .less(less),
+             .result(result),
+             .cout(cout)
+             );
+           
+          initial
+          begin
+             a = 1;
+             b = 1;
+             a_sel = 0;
+             b_sel = 0;
+             cin = 1;
+             op = 2;
+             less = 0;
+          end
+    
     
 endmodule
