@@ -54,7 +54,7 @@ module sixteen_bit_alu(
         .cin(cin[0]), // change to cout of previous
         .op(op),
         .less(less),
-        .result(result),
+        .result(result[0]),
         .cout(cin[1])
         );
     
@@ -67,7 +67,7 @@ module sixteen_bit_alu(
         .cin(cin[1]), // change to cout of previous
         .op(op),
         .less(less),
-        .result(result),
+        .result(result[1]),
         .cout(cin[2])
         );
     
@@ -79,7 +79,7 @@ module sixteen_bit_alu(
         .cin(cin[2]), // change to cout of previous
         .op(op),
         .less(less),
-        .result(result),
+        .result(result[2]),
         .cout(cin[3])
         );
         
@@ -91,7 +91,7 @@ module sixteen_bit_alu(
         .cin(cin[3]), // change to cout of previous
         .op(op),
         .less(less),
-        .result(result),
+        .result(result[3]),
         .cout(cin[4])
         );
         
@@ -103,7 +103,7 @@ module sixteen_bit_alu(
         .cin(cin[4]), // change to cout of previous
         .op(op),
         .less(less),
-        .result(result),
+        .result(result[4]),
         .cout(cin[5])
         );
         
@@ -115,7 +115,7 @@ module sixteen_bit_alu(
         .cin(cin[5]), // change to cout of previous
         .op(op),
         .less(less),
-        .result(result),
+        .result(result[5]),
         .cout(cin[6])
         );
     
@@ -127,7 +127,7 @@ module sixteen_bit_alu(
         .cin(cin[6]), // change to cout of previous
         .op(op),
         .less(less),
-        .result(result),
+        .result(result[6]),
         .cout(cin[7])
         );
         
@@ -139,7 +139,7 @@ module sixteen_bit_alu(
         .cin(cin[7]), // change to cout of previous
         .op(op),
         .less(less),
-        .result(result),
+        .result(result[7]),
         .cout(cin[8])
         );
         
@@ -151,7 +151,7 @@ module sixteen_bit_alu(
         .cin(cin[8]), // change to cout of previous
         .op(op),
         .less(less),
-        .result(result),
+        .result(result[8]),
         .cout(cin[9])
         );
                 
@@ -163,7 +163,7 @@ module sixteen_bit_alu(
         .cin(cin[9]), // change to cout of previous
         .op(op),
         .less(less),
-        .result(result),
+        .result(result[9]),
         .cout(cin[10])
         );
     
@@ -175,7 +175,7 @@ module sixteen_bit_alu(
         .cin(cin[10]), // change to cout of previous
         .op(op),
         .less(less),
-        .result(result),
+        .result(result[10]),       
         .cout(cin[11])
         );
         
@@ -187,7 +187,7 @@ module sixteen_bit_alu(
         .cin(cin[11]), // change to cout of previous
         .op(op),
         .less(less),
-        .result(result),
+        .result(result[11]),
         .cout(cin[12])
         );
         
@@ -199,7 +199,7 @@ module sixteen_bit_alu(
         .cin(cin[12]), // change to cout of previous
         .op(op),
         .less(less),
-        .result(result),
+        .result(result[12]),
         .cout(cin[13])
         );
         
@@ -211,7 +211,7 @@ module sixteen_bit_alu(
         .cin(cin[13]), // change to cout of previous
         .op(op),
         .less(less),
-        .result(result),
+        .result(result[13]),
         .cout(cin[14])
         );
     
@@ -223,7 +223,7 @@ module sixteen_bit_alu(
         .cin(cin[14]), // change to cout of previous
         .op(op),
         .less(less),
-        .result(result),
+        .result(result[14]),
         .cout(cin[15])
         );
         
@@ -235,7 +235,7 @@ module sixteen_bit_alu(
         .cin(cin[15]), // change to cout of previous
         .op(op),
         .less(less),
-        .result(result),
+        .result(result[15]),
         .set(set),
         .overflow(overflow)
         ); 

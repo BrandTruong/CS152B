@@ -42,7 +42,7 @@ module five_bit_two_one_mux(
     output reg[4:0] x
     );
     
-    
+    // if sel = 1 pick b else pick a
     always @*
         if(sel)
             x = b;

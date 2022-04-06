@@ -99,10 +99,10 @@ module one_bit_alu(
     addbit addbit_UUT (.a(a), .b(b), .cin(cin), .cout(cout), .sum(op_add));
     
     wire mux_output_0;
-    two_one_mux and_or (.sel(op[1]), .a(op_and), .b(op_or), .x(mux_output_0));
+    two_one_mux and_or (.sel(op[0]), .a(op_and), .b(op_or), .x(mux_output_0));
     
     wire mux_output_1;
-    two_one_mux add_less (.sel(op[1]), .a(op_add), .b(less), .x(mux_output_1));
+    two_one_mux add_less (.sel(op[0]), .a(op_add), .b(less), .x(mux_output_1));
     
-    two_one_mux result_mux (.sel(op[0]), .a(mux_output_0), .b(mux_output_1), .x(result));
+    two_one_mux result_mux (.sel(op[1]), .a(mux_output_0), .b(mux_output_1), .x(result));
 endmodule
