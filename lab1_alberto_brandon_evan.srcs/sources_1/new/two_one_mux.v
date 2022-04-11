@@ -35,11 +35,26 @@ module two_one_mux(
             x = a;
 endmodule
 
-module five_bit_two_one_mux(
+module four_bit_two_one_mux(
     input sel,
-    input[4:0] a,
-    input[4:0] b,
-    output reg[4:0] x
+    input[3:0] a,
+    input[3:0] b,
+    output reg[3:0] x
+    );
+    
+    // if sel = 1 pick b else pick a
+    always @*
+        if(sel)
+            x = b;
+        else
+            x = a;
+endmodule
+
+module sixteen_bit_two_one_mux(
+    input sel,
+    input[15:0] a,
+    input[15:0] b,
+    output reg[15:0] x
     );
     
     // if sel = 1 pick b else pick a

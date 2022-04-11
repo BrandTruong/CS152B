@@ -29,7 +29,7 @@ module one_bit_alu_msb(
     input[1:0] op,
     input less,
     output result,
-    output set,
+    output set_less,
     output overflow
     );
     
@@ -52,7 +52,7 @@ module one_bit_alu_msb(
     
     wire cout;
     wire op_add;
-    addbit addbit_UUT (.a(a), .b(b), .cin(cin), .cout(cout), .sum(op_add));
+    addbit addbit_UUT (.a(a_processed), .b(b_processed), .cin(cin), .cout(cout), .sum(op_add));
     
     wire mux_output_0;
     two_one_mux and_or (.sel(op[1]), .a(op_and), .b(op_or), .x(mux_output_0));
@@ -64,7 +64,7 @@ module one_bit_alu_msb(
     
     xor(overflow, cin, cout);
     
-    assign set = op_add;    
+    assign set_less = op_add;    
 endmodule
 
 module one_bit_alu(
@@ -96,7 +96,7 @@ module one_bit_alu(
     or(op_or, a_processed, b_processed);
     
     wire op_add;
-    addbit addbit_UUT (.a(a), .b(b), .cin(cin), .cout(cout), .sum(op_add));
+    addbit addbit_UUT (.a(a_processed), .b(b_processed), .cin(cin), .cout(cout), .sum(op_add));
     
     wire mux_output_0;
     two_one_mux and_or (.sel(op[0]), .a(op_and), .b(op_or), .x(mux_output_0));

@@ -139,29 +139,32 @@ module testbench(
         reg [15:0] a;
         reg [15:0] b;
         reg [3:0] alu_control;
-        reg less;
-        wire [15:0] result;
-        wire set;
         wire overflow;
-        wire cout;
+        wire zero;
+        wire [15:0] result;
             
         sixteen_bit_alu sixteen_bit_alu(
             .a(a),
             .b(b),
             .alu_ctrl(alu_control),
             .overflow(overflow),
-            .zero(set),
+            .zero(zero),
             .result(result)
             );
          
          initial
          begin
-            a = 16'b0111111111111111;
-            b = 16'b1;
-            alu_control = 4'b0001;
-         end
-         */
          
+             a = 16'b1;
+             b = 16'b1;
+             alu_control = 4'b1001;
+             #10
+             a = 16'b111;
+             b = 16'b100;
+             alu_control = 4'b1001;
+             #10;        
+            
+         end
          reg[15:0] a;
          reg[15:0] b;
          reg[1:0] shift_control; // 00 arithmeitc left shift, 01 logical left shift, 10 arithmetic right shift, 11 logical right shfit
@@ -176,8 +179,47 @@ module testbench(
             
          initial
          begin
-            a = 16'b1111111111111000;
-            b = 4'b0100;
-            shift_control = 2'b11;
+            a = 16'b0111111111111111;
+            b = 4;
+            shift_control = 2'b00;
+        end
+        */
+        reg clk;
+        reg rst;
+        reg[4:0] Ra;
+        reg[4:0] Rb;
+        reg[4:0] Rw;
+        reg WrEn;
+        reg[15:0] busW;
+        wire[15:0] busA;
+        wire[15:0] busB;
+        
+        register_file register_file_UUT(
+            .clk(clk),
+            .rst(rst),
+            .Ra(Ra),
+            .Rb(Rb),
+            .Rw(Rw),
+            .WrEn(WrEn),
+            .busW(busW),
+            .busA(busA),
+            .busB(busB)
+            );
+        always #10
+        begin
+            clk = ~clk;
+            
+        end
+        initial
+        begin
+            clk = 0;
+            rst = 1;
+            Ra = 1;
+            Rb = 2;
+            Rw = 2;
+            WrEn = 1;
+            busW = 40;
+            #20
+            rst = 0;
         end
 endmodule

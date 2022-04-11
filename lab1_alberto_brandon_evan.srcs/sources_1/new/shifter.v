@@ -32,22 +32,22 @@ module shifter(
     always @*
     begin
         case (shift_control)
-            2'b00,
-            2'b01:
-            begin
-                for (i = 15; i >= b; i = i - 1)
-                    x[i] = a[i - b];
-                for (j = b - 1; j >= 0; j = j - 1)
-                    x[j] = 0;
-            end  
-            2'b10:
-            begin
-                for (i = b; i <= 15; i = i + 1)
-                    x[i - b] = a[i];
-                for (j = 15 - b + 1; j <= 15; j = j + 1)
-                    x[j] = a[15];
-            end
-            2'b11:
+            2'b00, // arithmetic left
+            2'b10: // logical left
+                begin
+                    for (i = 15; i >= b; i = i - 1)
+                        x[i] = a[i - b];
+                    for (j = b - 1; j >= 0; j = j - 1)
+                        x[j] = 0;
+                end
+            2'b01: // arithmetic right
+                begin
+                    for (i = b; i <= 15; i = i + 1)
+                        x[i - b] = a[i];
+                    for (j = 15 - b + 1; j <= 15; j = j + 1)
+                        x[j] = a[15];
+                end
+            2'b11: // logical right
             begin
                 for (i = b; i <= 15; i = i + 1)
                     x[i - b] = a[i];
