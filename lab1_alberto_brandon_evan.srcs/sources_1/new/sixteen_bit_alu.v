@@ -32,6 +32,7 @@ module sixteen_bit_alu(
     wire a_sel;
     wire b_sel;
     wire [1:0] op;
+    wire inc_dec;
     reg less = 0;
     
     wire [15:0] cin;
@@ -41,7 +42,8 @@ module sixteen_bit_alu(
         .sel(alu_ctrl),
         .a_sel(a_sel),
         .b_sel(b_sel),
-        .op(op)
+        .op(op),
+        .inc_dec(inc_dec)
         );
         
     wire control;
@@ -55,6 +57,29 @@ module sixteen_bit_alu(
         .a(alu_result),
         .b(shift_result),
         .x(result)
+        );
+        
+    wire [15:0] b_temp;
+        
+    sixteen_bit_two_one_mux b_or_one(
+        .sel(inc_dec),
+        .a(b),
+        .b(1),
+        .x(b_temp)
+        );
+        
+    wire [15:0] b_final;
+        
+    wire inv;
+    wire b_sel_not;
+    not(b_sel_not, b_sel);
+    and(inv, b_sel_not, a_sel);
+    
+    sixteen_bit_two_one_mux b_temp_or_zero(
+        .sel(inv),
+        .a(b_temp),
+        .b(0),
+        .x(b_final)
         );
         
     shifter shifter_unit(
@@ -83,19 +108,20 @@ module sixteen_bit_alu(
     xnor(zero_bits[1], a[1], b[1]);
     xnor(zero_bits[0], a[0], b[0]);
     
-    wire zero;
-    and(zero, zero_bits[15], zero_bits[14], zero_bits[13], zero_bits[12], zero_bits[11], zero_bits[10], zero_bits[9],
+    wire inputs_are_equal;
+    and(inputs_are_equal, zero_bits[15], zero_bits[14], zero_bits[13], zero_bits[12], zero_bits[11], zero_bits[10], zero_bits[9],
     zero_bits[8], zero_bits[7], zero_bits[6], zero_bits[5], zero_bits[4], zero_bits[3], zero_bits[2], zero_bits[1], zero_bits[0]);
     //assign zero = a~^b;
     
+    nor(zero, result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7], result[8], result[9], result[10], result[11], result[12], result[13], result[14], result[15]);  
     
     wire set_less; 
     wire set;
-    or(set, set_less, zero);
+    or(set, set_less, inputs_are_equal);
             
     one_bit_alu bit_0 (
         .a(a[0]),
-        .b(b[0]),
+        .b(b_final[0]),
         .a_sel(a_sel),
         .b_sel(b_sel),
         .cin(cin[0]), // change to cout of previous
@@ -108,7 +134,7 @@ module sixteen_bit_alu(
     
     one_bit_alu bit_1 (
         .a(a[1]),
-        .b(b[1]),
+        .b(b_final[1]),
         .a_sel(a_sel),
         .b_sel(b_sel),
         .cin(cin[1]), // change to cout of previous
@@ -120,7 +146,7 @@ module sixteen_bit_alu(
     
     one_bit_alu bit_2 (
         .a(a[2]),
-        .b(b[2]),
+        .b(b_final[2]),
         .a_sel(a_sel),
         .b_sel(b_sel),
         .cin(cin[2]), // change to cout of previous
@@ -132,7 +158,7 @@ module sixteen_bit_alu(
         
     one_bit_alu bit_3 (
         .a(a[3]),
-        .b(b[3]),
+        .b(b_final[3]),
         .a_sel(a_sel),
         .b_sel(b_sel),
         .cin(cin[3]), // change to cout of previous
@@ -144,7 +170,7 @@ module sixteen_bit_alu(
         
     one_bit_alu bit_4 (
         .a(a[4]),
-        .b(b[4]),
+        .b(b_final[4]),
         .a_sel(a_sel),
         .b_sel(b_sel),
         .cin(cin[4]), // change to cout of previous
@@ -156,7 +182,7 @@ module sixteen_bit_alu(
         
     one_bit_alu bit_5 (
         .a(a[5]),
-        .b(b[5]),
+        .b(b_final[5]),
         .a_sel(a_sel),
         .b_sel(b_sel),
         .cin(cin[5]), // change to cout of previous
@@ -168,7 +194,7 @@ module sixteen_bit_alu(
     
     one_bit_alu bit_6 (
         .a(a[6]),
-        .b(b[6]),
+        .b(b_final[6]),
         .a_sel(a_sel),
         .b_sel(b_sel),
         .cin(cin[6]), // change to cout of previous
@@ -180,7 +206,7 @@ module sixteen_bit_alu(
         
     one_bit_alu bit_7 (
         .a(a[7]),
-        .b(b[7]),
+        .b(b_final[7]),
         .a_sel(a_sel),
         .b_sel(b_sel),
         .cin(cin[7]), // change to cout of previous
@@ -192,7 +218,7 @@ module sixteen_bit_alu(
         
     one_bit_alu bit_8 (
         .a(a[8]),
-        .b(b[8]),
+        .b(b_final[8]),
         .a_sel(a_sel),
         .b_sel(b_sel),
         .cin(cin[8]), // change to cout of previous
@@ -204,7 +230,7 @@ module sixteen_bit_alu(
                 
     one_bit_alu bit_9 (
         .a(a[9]),
-        .b(b[9]),
+        .b(b_final[9]),
         .a_sel(a_sel),
         .b_sel(b_sel),
         .cin(cin[9]), // change to cout of previous
@@ -216,7 +242,7 @@ module sixteen_bit_alu(
     
     one_bit_alu bit_10 (
         .a(a[10]),
-        .b(b[10]),
+        .b(b_final[10]),
         .a_sel(a_sel),
         .b_sel(b_sel),
         .cin(cin[10]), // change to cout of previous
@@ -228,7 +254,7 @@ module sixteen_bit_alu(
         
     one_bit_alu bit_11 (
         .a(a[11]),
-        .b(b[11]),
+        .b(b_final[11]),
         .a_sel(a_sel),
         .b_sel(b_sel),
         .cin(cin[11]), // change to cout of previous
@@ -240,7 +266,7 @@ module sixteen_bit_alu(
         
     one_bit_alu bit_12 (
         .a(a[12]),
-        .b(b[12]),
+        .b(b_final[12]),
         .a_sel(a_sel),
         .b_sel(b_sel),
         .cin(cin[12]), // change to cout of previous
@@ -252,7 +278,7 @@ module sixteen_bit_alu(
         
     one_bit_alu bit_13 (
         .a(a[13]),
-        .b(b[13]),
+        .b(b_final[13]),
         .a_sel(a_sel),
         .b_sel(b_sel),
         .cin(cin[13]), // change to cout of previous
@@ -264,7 +290,7 @@ module sixteen_bit_alu(
     
     one_bit_alu bit_14 (
         .a(a[14]),
-        .b(b[14]),
+        .b(b_final[14]),
         .a_sel(a_sel),
         .b_sel(b_sel),
         .cin(cin[14]), // change to cout of previous
@@ -276,7 +302,7 @@ module sixteen_bit_alu(
         
     one_bit_alu_msb bit_15 (
         .a(a[15]),
-        .b(b[15]),
+        .b(b_final[15]),
         .a_sel(a_sel),
         .b_sel(b_sel),
         .cin(cin[15]), // change to cout of previous
