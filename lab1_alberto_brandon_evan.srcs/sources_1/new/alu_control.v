@@ -50,7 +50,7 @@ module alu_control(
     localparam AND = 5'b00000;
     localparam DEC = 5'b01101;
     localparam INC = 5'b00101;
-    localparam INV = 5'b10010;
+    localparam INV = 5'b10100;
     localparam ASL = 5'b11000;
     localparam ASR = 5'b11010;
     localparam LSL = 5'b11100;

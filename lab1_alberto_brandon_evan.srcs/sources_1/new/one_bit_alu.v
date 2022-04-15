@@ -64,7 +64,10 @@ module one_bit_alu_msb(
     
     xor(overflow, cin, cout);
     
-    assign set_less = op_add;    
+    wire not_op_add;
+    not(not_op_add, op_add);
+    
+    two_one_mux set_less_mux (.sel(overflow), .a(op_add), .b(not_op_add), .x(set_less));  
 endmodule
 
 module one_bit_alu(

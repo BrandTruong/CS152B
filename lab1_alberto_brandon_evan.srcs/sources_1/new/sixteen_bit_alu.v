@@ -59,26 +59,21 @@ module sixteen_bit_alu(
         .x(result)
         );
         
-    wire [15:0] b_temp;
-        
-    sixteen_bit_two_one_mux b_or_one(
-        .sel(inc_dec),
-        .a(b),
-        .b(1),
-        .x(b_temp)
-        );
-        
     wire [15:0] b_final;
-        
+    
+    //Invert logic    
     wire inv;
-    wire b_sel_not;
+    wire b_sel_not;    
     not(b_sel_not, b_sel);
     and(inv, b_sel_not, a_sel);
     
-    sixteen_bit_two_one_mux b_temp_or_zero(
-        .sel(inv),
-        .a(b_temp),
-        .b(0),
+    wire inc_dec_or_inv;
+    or(inc_dec_or_inv, inc_dec, inv);
+    
+    sixteen_bit_two_one_mux b_or_one(
+        .sel(inc_dec_or_inv),
+        .a(b),
+        .b(1),
         .x(b_final)
         );
         
@@ -88,7 +83,33 @@ module sixteen_bit_alu(
         .shift_control(op), // 00 arithmeitc left shift, 01 logical left shift, 10 arithmetic right shift, 11 logical right shfit
         .x(shift_result)
         );
-        
+    wire shift_overflow;
+    xor(shift_overflow, a[15], shift_result[15]);
+    wire alu_overflow;
+    
+    wire arithmetic_left_shift_control;
+    wire not_first_bit;
+    wire not_zeroth_bit;
+    not(not_zeroth_bit, alu_ctrl[0]);
+    not(not_first_bit, alu_ctrl[1]);
+    and(arithmetic_left_shift_control, not_zeroth_bit, not_first_bit, alu_ctrl[3], alu_ctrl[2]);
+    
+    wire alu_shift_overflow;
+    two_one_mux alu_or_shift_overflow(
+        .sel(arithmetic_left_shift_control),
+        .a(alu_overflow),
+        .b(shift_overflow),
+        .x(alu_shift_overflow)
+        );
+    wire overflow_slt_control;
+    and(overflow_slt_control, alu_ctrl[3], alu_ctrl[0]);
+    two_one_mux final_overflow(
+        .sel(overflow_slt_control),
+        .a(alu_shift_overflow),
+        .b(0),
+        .x(overflow)
+        );
+    
     wire zero_bits[15:0];
     
     xnor(zero_bits[15], a[15], b[15]);
@@ -310,6 +331,6 @@ module sixteen_bit_alu(
         .less(less),
         .result(alu_result[15]),
         .set_less(set_less),
-        .overflow(overflow)
+        .overflow(alu_overflow)
         ); 
 endmodule
