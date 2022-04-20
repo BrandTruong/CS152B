@@ -23,25 +23,22 @@
 module clockdiv(
     input clk,
     input rst,
-    output reg onehz
+    output onehz
     );
     
-    reg [31:0] period;
-    
-    initial
-    begin
-        period = 0;
-        onehz = 0;
-    end
+    reg [31:0] period = 0;
+    reg onehz_reg = 0;
+    assign onehz = onehz_reg;
     
     always @ (posedge clk)
     begin
         if (rst)
             period <= 0;
+            //49999999
         else if (period == 49999999)
         begin
             period <= 0;
-            onehz <= ~onehz;
+            onehz_reg <= ~onehz_reg;
         end
         else
             period <= period + 1;
