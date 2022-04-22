@@ -30,10 +30,13 @@ module clockdiv(
     reg onehz_reg = 0;
     assign onehz = onehz_reg;
     
-    always @ (posedge clk)
+    always @ (posedge clk or posedge rst)
     begin
         if (rst)
+        begin
             period <= 0;
+            onehz_reg <= 0;
+        end
             //49999999
         else if (period == 49999999)
         begin

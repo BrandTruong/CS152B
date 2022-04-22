@@ -20,12 +20,13 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module debouncer(input btn_in, clk, output btn_out);
+module debouncer(input btn_in, input clk, input rst, output btn_out);
     wire clk_div;
     wire q1, q2, not_q2, q0;
-    clock_div clock_div(.clk(clk), .clk_div(clk_div));
+    clock_div clock_div_1(.clk(clk), .clk_div(clk_div));
     d_flipflop d_flipflop_1(.clk(clk_div), .d(q0), .q(q1));
-    d_flipflop d_flipflop_2(.clk(clk_div), .d(q1), .q(q2));
+    d_flipflop d_flipflop_2(.clk(clk_div), .d(q1), .q(q2));;
+    assign q0 = btn_in;
     assign not_q2 = ~q2;
     assign btn_out = q1 & not_q2;
 endmodule
