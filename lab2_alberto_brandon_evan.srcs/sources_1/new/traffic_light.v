@@ -67,7 +67,6 @@ module traffic_light(
     initial begin
         time_counter <= 6;
         state <= MAIN_FIRST_6;
-        next_state <= MAIN_SECOND_6;
         main_light <= GREEN;
         side_light <= RED;
         walk_register <= 0;
@@ -81,7 +80,6 @@ module traffic_light(
         begin
             time_counter <= 6;
             state <= MAIN_FIRST_6;
-            next_state <= MAIN_SECOND_6;
             main_light <= GREEN;
             side_light <= RED;
             walk_register <= 0;
@@ -90,6 +88,47 @@ module traffic_light(
             walk_register <= 1;
         else if (time_counter == 1)
         begin
+            case (state)
+                MAIN_FIRST_6:
+                begin
+                    if (sensor)
+                        next_state = MAIN_SECOND_3;
+                    else
+                        next_state = MAIN_SECOND_6;
+                end
+                MAIN_SECOND_3,
+                MAIN_SECOND_6:
+                begin
+                    next_state = MAIN_YELLOW;
+                end
+                MAIN_YELLOW:
+                begin
+                    if (walk_register)
+                        next_state = ALL_RED;
+                    else
+                        next_state = SIDE_FIRST_6; // check for walk_btn
+                end
+                SIDE_FIRST_6:
+                begin
+                    if (sensor)
+                        next_state = SIDE_SECOND_3;
+                    else
+                        next_state = SIDE_YELLOW;
+                end
+                SIDE_SECOND_3:
+                begin
+                    next_state = SIDE_YELLOW;
+                end
+                SIDE_YELLOW:
+                begin
+                    next_state = MAIN_FIRST_6;
+                end
+                ALL_RED:
+                begin
+                    next_state = SIDE_FIRST_6;
+                    walk_light <= 1;
+                end
+            endcase
             state = next_state;
             case (state)
                 MAIN_FIRST_6,
@@ -105,62 +144,41 @@ module traffic_light(
                     time_counter <= 2;
             endcase
             case (state)
-                MAIN_FIRST_6:
-                begin
-                    if (sensor)
-                        next_state <= MAIN_SECOND_3;
-                    else
-                        next_state <= MAIN_SECOND_6;
-                    main_light <= GREEN;
-                    side_light <= RED;
-                end
-                MAIN_SECOND_3,
-                MAIN_SECOND_6:
-                begin
-                    next_state <= MAIN_YELLOW;
-                    main_light <= GREEN;
-                    side_light <= RED;
-                end
-                MAIN_YELLOW:
-                begin
-                    if (walk_register)
-                        next_state <= ALL_RED;
-                    else
-                        next_state <= SIDE_FIRST_6; // check for walk_btn
-                    main_light <= YELLOW;
-                    side_light <= RED;
-                end
-                SIDE_FIRST_6:
-                begin
-                    walk_register <= 0;
-                    walk_light <= 0;
-                    main_light <= RED;
-                    side_light <= GREEN;
-                    if (sensor)
-                        next_state <= SIDE_SECOND_3;
-                    else
-                        next_state <= SIDE_YELLOW;
-                end
+                MAIN_FIRST_6,
+                MAIN_SECOND_6,
+                MAIN_SECOND_3:
+                    begin
+                        main_light <= GREEN;
+                        side_light <= RED;
+                    end
+                SIDE_FIRST_6,
                 SIDE_SECOND_3:
-                begin
-                    next_state <= SIDE_YELLOW;
-                    main_light <= RED;
-                    side_light <= GREEN;
-                end
+                    begin
+                        main_light <= RED;
+                        side_light <= GREEN;
+                    end
+                MAIN_YELLOW:
+                    begin
+                        main_light <= YELLOW;
+                        side_light <= RED;
+                    end
                 SIDE_YELLOW:
-                begin
-                    next_state <= MAIN_FIRST_6;
-                    main_light <= RED;
-                    side_light <= YELLOW;
-                end
+                    begin
+                        main_light <= RED;
+                        side_light <= YELLOW;
+                    end
                 ALL_RED:
-                begin
-                    main_light <= RED;
-                    side_light <= RED;
-                    next_state <= SIDE_FIRST_6;
-                    walk_light <= 1;
-                end
+                    begin
+                        main_light <= RED;
+                        side_light <= RED;
+                        walk_light <= 1;
+                    end  
             endcase
+            if(state == SIDE_FIRST_6)
+            begin
+                walk_register <= 0;
+                walk_light <= 0;
+            end
         end
         else
             time_counter <= time_counter - 1;

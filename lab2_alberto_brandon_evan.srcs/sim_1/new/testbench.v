@@ -29,19 +29,26 @@ module testbench(
     wire [2:0] main_light;
     wire [2:0] side_light;
     wire walk_light;
+    wire onehz;
+    wire [2:0] time_counter;
     
-     traffic_light_fsm traffic_light_fsm_uut (
+     traffic_light traffic_light_fsm_uut (
         .clk(clk),
         .rst(rst), 
         .walk_btn(walk_btn), 
         .sensor(sensor), 
         .main_light(main_light), 
         .side_light(side_light), 
-        .walk_light(walk_light)
+        .walk_light(walk_light),
+        .time_counter(time_counter),
+        .onehz(onehz)
     );
+    
     initial
     begin
         clk = 0;
+        rst = 1;
+        #20
         rst = 0;
         walk_btn = 0;
         sensor = 0;
